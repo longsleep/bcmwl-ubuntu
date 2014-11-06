@@ -1,0 +1,36 @@
+#!/usr/bin/make -f
+# Copyright (C) 2009 Alberto Milone
+
+DRIVER_NAME := bcmwl
+VERSION := $(shell dpkg-parsechangelog | grep '^Version:' | cut -d' ' -f2 | cut -d- -f1 | cut -d\: -f2)
+PKG_kernel_src  := bcmwl-kernel-source
+ARCH := $(shell dpkg --print-architecture)
+ifeq ($(ARCH),amd64)
+ARCH_SUFFIX=x86_64
+else
+ARCH_SUFFIX=i386
+endif
+
+%:
+	dh "$@" --with modaliases
+
+# we don't actually build/clean the source here, it's dkms
+override_dh_auto_clean:
+
+override_dh_auto_build:
+
+override_dh_auto_install:
+	# just create .install files from templates.
+	for i in dkms.conf \
+		$(PKG_kernel_src).install; do \
+		sed -e "s|#VERSION#|$(VERSION)|"   \
+			-e "s|#ARCH#|$(ARCH_SUFFIX)|"   \
+			debian/$$i.in > debian/$$i;      \
+	done
+
+override_dh_clean:
+	dh_clean
+
+	rm -f debian/dkms.conf \
+	debian/$(PKG_kernel_src).install \
+	rm -Rf $(CURDIR)/$(PKG_kernel_src)

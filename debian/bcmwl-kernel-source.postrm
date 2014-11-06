@@ -1,0 +1,22 @@
+#!/bin/sh
+set -e
+# Copyright (C) 2002-2005 Flavio Stanchina
+# Copyright (C) 2005-2006 Aric Cyr
+# Copyright (C) 2007-2008 Mario Limonciello
+# Copyright (C) 2009 Alberto Milone
+
+#DEBHELPER#
+
+BLACKLIST_FILE=/etc/modprobe.d/blacklist-bcm43.conf
+
+case "$1" in
+	remove|purge)
+		# Remove blacklist file
+		rm -f $BLACKLIST_FILE
+		
+		# Update initramfs
+		update-initramfs -u
+		;;
+esac
+
+#DEBHELPER#

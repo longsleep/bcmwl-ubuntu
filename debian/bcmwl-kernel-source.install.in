@@ -1,0 +1,7 @@
+src/lib/wlc_hybrid.o_shipped_#ARCH#	usr/src/bcmwl-#VERSION#/lib
+src/lib/*.txt		usr/src/bcmwl-#VERSION#/lib
+src/src/*			usr/src/bcmwl-#VERSION#/src
+Makefile			usr/src/bcmwl-#VERSION#
+debian/dkms.conf	usr/src/bcmwl-#VERSION#
+debian/patches/*	usr/src/bcmwl-#VERSION#/patches
+

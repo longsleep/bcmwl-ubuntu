@@ -1,0 +1,20 @@
+Source: bcmwl
+Section: admin
+Priority: optional
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+XSBC-Original-Maintainer: Alberto Milone <alberto.milone@canonical.com>
+Standards-Version: 3.9.1
+Build-Depends: debhelper (>= 7.0.50~),
+ dh-modaliases
+
+Package: bcmwl-kernel-source
+Architecture: i386 amd64
+Depends: ${misc:Depends}, dkms, linux-libc-dev, libc6-dev
+XB-Modaliases: ${modaliases}
+Conflicts: bcmwl-modaliases
+Replaces: bcmwl-modaliases
+Description: Broadcom 802.11 Linux STA wireless driver source
+ This package contains Broadcom 802.11 Linux STA wireless driver
+ for use with Broadcom's BCM4311-, BCM4312-, BCM4313-, BCM4321-,
+ BCM4322-, BCM43224-, and BCM43225-, BCM43227- and BCM43228-based
+ hardware.

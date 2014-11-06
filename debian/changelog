@@ -1,0 +1,483 @@
+bcmwl (6.30.223.248+bdcom-0ubuntu2) vivid; urgency=medium
+
+  * debian/dkms.conf.in,
+    debian/patches/0014-add-support-for-Linux-3.17.patch,
+    debian/patches/0015-add-support-for-Linux-3.18.patch:
+    - Add support for Linux 3.17 (LP: #1358966).
+      Credit for the patch goes to Brian Norris.
+    - Add support for Linux 3.18 (LP: #1358966).
+      Credit for the patch goes to Krzysztof Kolasa.
+
+ -- Alberto Milone <alberto.milone@canonical.com>  Thu, 06 Nov 2014 18:43:27 +0100
+
+bcmwl (6.30.223.248+bdcom-0ubuntu1) utopic; urgency=medium
+
+  * New upstream release: (LP: #1342645)
+    - This is an official public release from Broadcom.
+  * debian/dkms.conf.in:
+    - Drop patches for kernels 3.10 (now upstream)
+
+ -- Robert Ancell <robert.ancell@canonical.com>  Fri, 01 Aug 2014 11:09:43 +1200
+
+bcmwl (6.30.223.141+bdcom-0ubuntu4) utopic; urgency=medium
+
+  * debian/patches/0013-gcc.patch:
+    - Fix build with recent version of GCC (LP: #1328858)
+
+ -- Robert Ancell <robert.ancell@canonical.com>  Fri, 01 Aug 2014 10:38:46 +1200
+
+bcmwl (6.30.223.141+bdcom-0ubuntu3) utopic; urgency=medium
+
+  * debian/patches/0012-add-support-for-Linux-3.15.patch:
+    - Add support for Linux 3.15 (LP: #1307744).
+
+ -- Alberto Milone <alberto.milone@canonical.com>  Mon, 12 May 2014 18:33:36 +0200
+
+bcmwl (6.30.223.141+bdcom-0ubuntu2) trusty; urgency=low
+
+  [ Shuduo Sang ]
+  * 0010-change-the-network-interface-name-from-eth-to-wlan.patch:
+    - Change the network interface name from eth to wlan
+      (LP: #1157136).
+
+  [ Krzysztof Kolasa ]
+  * 0011-do-not-define-__devinit-as-__init-in-linux-3.8-as-__.patch:
+    - Do not define __devinit as __init when dealing with
+      Linux >= 3.8.
+
+ -- Alberto Milone <alberto.milone@canonical.com>  Fri, 22 Nov 2013 11:24:36 +0100
+
+bcmwl (6.30.223.141+bdcom-0ubuntu1) saucy; urgency=low
+
+  * New upstream release:
+    - This is an official public release from Broadcom.
+  * debian/dkms.conf.in:
+    - Drop patches for kernels 3.4-3.9 (now upstream)
+      and keep only the one for 3.10.
+  * 0009-add-support-for-linux-3.10.0.patch:
+    - Refresh for the latest upstream release.
+
+ -- Alberto Milone <alberto.milone@canonical.com>  Wed, 09 Oct 2013 16:24:16 +0200
+
+bcmwl (6.30.223.30+bdcom-0ubuntu3) saucy; urgency=low
+
+  * debian/dkms.conf.in:
+    - Make sure 0009-add-support-for-linux-3.10.0.patch
+      is applied only against Linux 3.10.
+
+ -- Alberto Milone <alberto.milone@canonical.com>  Mon, 01 Jul 2013 15:22:30 +0200
+
+bcmwl (6.30.223.30+bdcom-0ubuntu2) saucy; urgency=low
+
+  * debian/dkms.conf.in,
+    debian/patches/0009-add-support-for-linux-3.10.0.patch:
+    - Add support for Linux 3.10.
+      Thanks to Maarten Lankhorst for the patch.
+
+ -- Alberto Milone <alberto.milone@canonical.com>  Tue, 18 Jun 2013 17:40:40 +0200
+
+bcmwl (6.30.223.30+bdcom-0ubuntu1) saucy; urgency=low
+
+  * New upstream release.
+  * debian/dkms.conf.in:
+    - Drop patches for Linux 3.2 and 3.4.
+  * 0006-add-support-for-linux-3.8.0.patch,
+    0007-nl80211-move-scan-API-to-wdev.patch:
+    - Refresh against new release.
+  * 0008-add-support-for-linux-3.9.0.patch:
+    - Add support for Linux 3.9 (LP: #1157880).
+
+ -- Alberto Milone <alberto.milone@canonical.com>  Wed, 15 May 2013 13:11:43 +0200
+
+bcmwl (6.20.155.1+bdcom-0ubuntu6) raring; urgency=low
+
+  * debian/control:
+    - Drop all the dependencies on the linux-headers.
+
+ -- Alberto Milone <alberto.milone@canonical.com>  Thu, 17 Jan 2013 16:31:46 +0100
+
+bcmwl (6.20.155.1+bdcom-0ubuntu5) raring; urgency=low
+
+  * 0007-nl80211-move-scan-API-to-wdev.patch:
+   - Move scan API to wdev. This fixes an issue with
+     Linux >= 3.6 (LP: #1098225).
+     Thanks to Robert Hooker for suggesting the patch.
+
+ -- Alberto Milone <alberto.milone@canonical.com>  Thu, 10 Jan 2013 18:09:48 +0100
+
+bcmwl (6.20.155.1+bdcom-0ubuntu4) raring; urgency=low
+
+  * 0006-add-support-for-linux-3.8.0.patch:
+    - Make sure to pass the correct argument to wl_ch_to_chanspec
+      according to the kernel (LP: #1097729).
+
+ -- Alberto Milone <alberto.milone@canonical.com>  Wed, 09 Jan 2013 15:28:26 +0100
+
+bcmwl (6.20.155.1+bdcom-0ubuntu3) raring; urgency=low
+
+  * 0006-add-support-for-linux-3.8.0.patch:
+    - Add support for Linux 3.8 (LP: #1095751).
+
+ -- Alberto Milone <alberto.milone@canonical.com>  Tue, 08 Jan 2013 15:13:17 +0100
+
+bcmwl (6.20.155.1+bdcom-0ubuntu2) raring; urgency=low
+
+  * Drop parsing of src/src/wl/sys/wl_linux.c, as the current upstream version
+    dropped all useful vendor matches in its pci_device_id struct and now has
+    a broken modalias. Keep a static debian/bcmwl-kernel-source.modaliases
+    instead which matches on any Broadcom network device (vendor 14E4 class 02
+    subclass 80). This brings back a proper "Modaliases:" package header.
+    (LP: #1089943)
+
+ -- Martin Pitt <martin.pitt@ubuntu.com>  Thu, 13 Dec 2012 16:02:24 +0100
+
+bcmwl (6.20.155.1+bdcom-0ubuntu1) raring; urgency=low
+
+  * New upstream release (LP: #923809):
+    - Added 43142 support.
+    - Added 4331 support.
+  * debian/control:
+    - depend on the different flavours of the linux-headers.
+  * Refresh 0002-Makefile.patch and 0001-MODULE_LICENSE.patch.
+
+ -- Alberto Milone <alberto.milone@canonical.com>  Tue, 11 Dec 2012 17:06:22 +0100
+
+bcmwl (5.100.82.112+bdcom-0ubuntu4) raring; urgency=low
+
+  * debian/bcmwl-kernel-source.postinst: Silence the errors from rmmod about
+    the modules not being loaded. This is fully expected, and just causes
+    confusion, as well as autopkgtest failures.
+
+ -- Martin Pitt <martin.pitt@ubuntu.com>  Wed, 07 Nov 2012 14:54:27 +0100
+
+bcmwl (5.100.82.112+bdcom-0ubuntu3) quantal; urgency=low
+
+  * debian/bcmwl-kernel-source.postinst: Mirror the actions of the installed
+    modprobe.d files, i. e. rmmod the b43 driver and try to modprobe wl, so
+    that this package works right after installation. (LP: #1065827)
+  * debian/bcmwl-kernel-source.postinst: Drop duplicate #DEBHELPER# token. It
+    does not currently expand to anything, but it looks confusing.
+
+ -- Martin Pitt <martin.pitt@ubuntu.com>  Fri, 12 Oct 2012 14:00:38 +0200
+
+bcmwl (5.100.82.112+bdcom-0ubuntu2) quantal; urgency=low
+
+  * 0004-Add-support-for-Linux-3.2.patch:
+    - Make sure the patch can always be applied.
+  * debian/dkms.conf.in:
+    - Always apply all patches (LP: #1020059).
+
+ -- Alberto Milone <alberto.milone@canonical.com>  Thu, 05 Jul 2012 13:20:00 +0200
+
+bcmwl (5.100.82.112+bdcom-0ubuntu1) quantal; urgency=low
+
+  * New upstream release:
+    - Add Monitor mode.
+    - Add cfg80211 API support. The choice of API is
+      done at compile time. If kernel version >= 2.6.32,
+      cfg80211 is used, otherwise wireless extension
+      is used. (End users should notice little
+      difference.)
+    - Fix problem with triggered a reboot when the
+      wireless was disabled using the function key.
+    - Fix a kernel panic observed on some 64-bit
+      systems.
+
+ -- Alberto Milone <alberto.milone@canonical.com>  Wed, 20 Jun 2012 13:30:20 +0200
+
+bcmwl (5.100.82.38+bdcom-0ubuntu8) quantal; urgency=low
+
+  * debian/dkms.conf.in:
+    - Make sure to apply 0005-add-support-for-linux-3.4.0.patch.
+
+ -- Alberto Milone <alberto.milone@canonical.com>  Mon, 18 Jun 2012 12:03:31 +0200
+
+bcmwl (5.100.82.38+bdcom-0ubuntu7) quantal; urgency=low
+
+  * Add 0005-Add-support-for-Linux-3.4.0.patch:
+    - Thanks to Eugene San for the patch (LP: #994255).
+  * debian/dkms.conf.in:
+    - Make sure that both patch 0004 and 0005 are applied
+      when dealing with linux 3.4.
+
+ -- Alberto Milone <alberto.milone@canonical.com>  Tue, 22 May 2012 13:10:38 +0200
+
+bcmwl (5.100.82.38+bdcom-0ubuntu6.1) precise-proposed; urgency=low
+
+  * debian/bcmwl-kernel-source.postinst:
+    - Blacklist brcmfmac, brcmsmac and bcma so that they don't
+      conflict with the closed driver (LP: #873117)
+
+ -- Alberto Milone <alberto.milone@canonical.com>  Mon, 23 Apr 2012 16:11:56 +0200
+
+bcmwl (5.100.82.38+bdcom-0ubuntu6) precise; urgency=high
+
+  * Update to match switch to PAE kernel by default in precise for i386
+    (LP: #986475)
+    - Depend on linux-headers-generic-pae on i386 instead of
+      linux-headers-generic so that the right headers are available to build
+      the driver
+  * Drop long obsolete lpia specific depends on linux-headers-lpia
+
+ -- Scott Kitterman <scott@kitterman.com>  Sat, 21 Apr 2012 02:09:32 -0400
+
+bcmwl (5.100.82.38+bdcom-0ubuntu5) precise; urgency=low
+
+  * Add 0004-Add-support-for-Linux-3.2.patch.
+
+ -- Alberto Milone <alberto.milone@canonical.com>  Tue, 22 Nov 2011 18:48:03 +0100
+
+bcmwl (5.100.82.38+bdcom-0ubuntu4) oneiric; urgency=low
+
+  [ Daniel van Vugt ]
+  * debian/bcmwl-kernel-source.prerm:
+    - Don't error out if we can't remove bcmwl module.  LP: #776439
+  * debian/bcmwl-kernel-source.postinst:
+    - Unconditionally update the blacklist (i.e. even on upgrade).
+      LP: #776165 
+
+ -- Michael Terry <mterry@ubuntu.com>  Wed, 01 Jun 2011 13:57:27 -0400
+
+bcmwl (5.100.82.38+bdcom-0ubuntu3) natty; urgency=low
+
+  * debian/bcmwl-kernel-source.postinst: Also blacklist brcm80211, to ensure
+    it actually is getting used. Thanks to Daniel van Vugt for the patch!
+    (LP: #747002)
+
+ -- Martin Pitt <martin.pitt@ubuntu.com>  Mon, 18 Apr 2011 12:14:43 +0200
+
+bcmwl (5.100.82.38+bdcom-0ubuntu2) natty; urgency=low
+
+  [ Henrik Rydberg ]
+  * debian/patches0003-Make-up-for-missing-init_MUTEX.patch:
+    - Make up for missing init_MUTEX (LP: #700176).
+
+ -- Alberto Milone <alberto.milone@canonical.com>  Mon, 10 Jan 2011 11:51:03 +0100
+
+bcmwl (5.100.82.38+bdcom-0ubuntu1) natty; urgency=low
+
+  * debian/control:
+    - Update the description.
+  * New upstream release:
+    - Add support for bcm43227 and bcm43228.
+    - Fix issue where iwconfig was sometimes reporting rate incorrectly.
+    - Add support for rfkill in kernels 2.6.31 to 2.6.36.
+    - Add support for scan complete event (SIOCGIWSCAN).
+    - Add EAGAIN (busy signal) to query of scan results.
+    - 4313 PHY fixes to improve throughput stability at different ranges.
+    - Fix interop issues with different APs.
+    - Fix hangs seen during Fn-F2 sequence.
+
+ -- Alberto Milone <alberto.milone@canonical.com>  Wed, 05 Jan 2011 16:56:18 +0100
+
+bcmwl (5.60.246.2+bdcom-0ubuntu3) natty; urgency=low
+
+  * debian/rules: Fix cleaning to not fall over on the buildds.
+
+ -- Martin Pitt <martin.pitt@ubuntu.com>  Thu, 25 Nov 2010 23:01:51 +0100
+
+bcmwl (5.60.246.2+bdcom-0ubuntu2) natty; urgency=low
+
+  * debian/control: Drop Vcs-Bzr:, that old branch is severely out of date.
+    Using lp:ubuntu/bcmwl now.
+  * debian/rules: Convert to dh 7. Bump debhelper compat level to 7 for that,
+    and drop cdbs dependency.
+  * debian/copyright: Point to versioned GPL license.
+  * debian/bcmwl-kernel-source.{postinst,postrm,prerm}: Add missing "set -e".
+  * debian/bcmwl-kernel-source.{postinst,postrm}: Call update-initramfs
+    without explicit path.
+  * debian/control: Fix spelling error.
+  * debian/control: Drop obsolete "lpia" architecture.
+  * debian/control: Bump Standards-Version to 3.9.1.
+  * Move from separate modalias file package to using a package header:
+    - debian/control, debian/rules, debian/bcmwl-modaliases.install.in: Drop
+      bcmwl-modaliases package.
+    - debian/rules: Build --with modaliases, to invoke dh_modaliases. Build
+      the modalias list to debian/bcmwl-kernel-source.modaliases, where
+      dh_modaliases picks it up.
+    - debian/control: Add XB-Modaliases header.
+    - debian/control: Add Conflicts:/Replaces: bcmwl-modaliases, so that the
+      obsolete modaliases package gets cleaned up on upgrades.
+
+ -- Martin Pitt <martin.pitt@ubuntu.com>  Thu, 25 Nov 2010 20:13:43 +0100
+
+bcmwl (5.60.246.2+bdcom-0ubuntu1) natty; urgency=low
+
+  * Remove 0003-autoconf.h.patch as it's no longer needed.
+  * Remove 0004-mclist.patch as it's no longer needed.
+  * New upstream release:
+   - Add support for kernels up to 2.6.36.
+   - Prevent the system from hanging when using the F2 hot key to
+     enable/disable wireless quickly while wireless is still in the
+     process of re-association with AP (LP: #611575).
+
+ -- Alberto Milone <alberto.milone@canonical.com>  Thu, 21 Oct 2010 13:25:16 +0200
+
+bcmwl (5.60.48.36+bdcom-0ubuntu5) maverick; urgency=low
+
+  * debian/patches/0004-mclist.patch:
+   - Switch over to multicast iterator functions for kernels v2.6.35 and
+     later.  This fixes module building on v2.6.35-1.1.  Conditionalise
+     the patch to support older kernels.  (LP: #590924)
+
+ -- Andy Whitcroft <apw@canonical.com>  Tue, 08 Jun 2010 11:19:05 +0100
+
+bcmwl (5.60.48.36+bdcom-0ubuntu4) maverick; urgency=low
+
+  * debian/patches/0003-autoconf.h.patch:
+    - Do not #include <linux/autoconf.h> in kernels that include it
+      automatically (2.6.15 or higher).  This fixes building on 2.6.33
+      which moved that file to <generated/autoconf.h>.  (LP: #580594)
+
+ -- Anders Kaseorg <andersk@mit.edu>  Fri, 14 May 2010 21:23:45 -0400
+
+bcmwl (5.60.48.36+bdcom-0ubuntu3) lucid; urgency=low
+
+  * Fix control file to support -generic-pae kernel install (LP: #567607) 
+
+ -- Jerone Young <jerone.young@canonical.com>  Tue, 20 Apr 2010 18:44:53 -0500
+
+bcmwl (5.60.48.36+bdcom-0ubuntu2) lucid; urgency=low
+
+  * debian/bcmwl-kernel-source.postinst:
+    - Do not exit after using DKMS if there are no errors.
+
+ -- Alberto Milone <alberto.milone@canonical.com>  Mon, 15 Feb 2010 15:57:31 +0100
+
+bcmwl (5.60.48.36+bdcom-0ubuntu1) lucid; urgency=low
+
+  * New upstream release (LP: #432780):
+    - Support up to linux kernel 2.6.31. 2.6.32 support is there
+      also but not tested (although reports from users suggests it
+      works fine).
+    - Support for hidden networks.
+    - Support for rfkill in kernels < 2.6.31.
+    - Setting power level via 'iwconfig eth1 txpower X' is now
+      operational
+    - Add support for 4313.
+    - Additional channels in both 2.4 and 5 Ghz bands.
+    - Fix issue with tkip group keys that caused the following
+      message to repeat often:
+      TKIP: RX tkey->key_idx=2 frame keyidx=1 priv=ffff8800cf80e840
+    - Fix a continuous assoc/disassoc loop (in Ubuntu 8.04)
+      with suspend/resume with WPA2 and wpa_supplicant.
+    - Fix bug affecting Ubuntu 8.04 which prevented from pinging when
+      Linux STA is IBSS creator with WEP.
+    - Fix bug affecting Ubuntu 9.04 which prevented from connecting to
+      hidden networks after suspend/resume.
+    - Fix bug which prevented the driver from associating to AP with
+      when transitioning from AES to TKIP encryption.
+  * debian/patches/0002-Makefile.patch:
+    - Refresh patch.
+  * debian/patches/0003-DEV_WL_IF.patch,
+    0004-broadcom-sta-5.10.91.9-linux-2.6.30.patch,
+    0005-NET_DEVICE_OPS.patch,
+    0006-broadcom-sta-5.10.91.9-linux-2.6.32.patch:
+    - Drop patches as they are now part of the upstream code.
+  * debian/dkms.conf.in:
+    - Remove the lines about the above mentioned patches.
+  * debian/bcmwl-kernel-source.postinst:
+    - Make use of /usr/lib/dkms/common.postinst (LP: #497149).
+  * Bump compat to 5.
+
+ -- Alberto Milone <alberto.milone@canonical.com>  Sun, 14 Feb 2010 19:58:58 +0100
+
+bcmwl (5.10.91.9+bdcom-0ubuntu5) lucid; urgency=low
+
+  [ Michael Casadevall ]
+  * debian/patches/0006-broadcom-sta-5.10.91.9-linux-2.6.32.patch:
+    - Fix the build for 2.6.32-HEAD (LP: #458757)
+
+  [ Alberto Milone ] 
+  * debian/dkms.conf.in:
+    - Make sure that Michael's patch is applied only for 2.6.32
+      kernels.
+
+ -- Alberto Milone <alberto.milone@canonical.com>  Wed, 18 Nov 2009 12:48:41 +0100
+
+bcmwl (5.10.91.9+bdcom-0ubuntu4) karmic; urgency=low
+
+  * debian/patches/0005-NET_DEVICE_OPS.patch:
+    - Don’t break build for <= 2.6.30.  (LP: #394279)
+
+ -- Anders Kaseorg <andersk@mit.edu>  Wed, 01 Jul 2009 11:05:25 -0400
+
+bcmwl (5.10.91.9+bdcom-0ubuntu3) karmic; urgency=low
+
+  * Update for new net_device_ops API (fixes build for 2.6.31).
+
+ -- Soren Hansen <soren@ubuntu.com>  Tue, 30 Jun 2009 22:55:18 -0700
+
+bcmwl (5.10.91.9+bdcom-0ubuntu2) karmic; urgency=low
+
+  * debian/rules, debian/bcmwl-kernel-source.install.in:
+    - Install only the binary compiled for the target
+      architecture.
+
+ -- Alberto Milone <alberto.milone@canonical.com>  Fri, 19 Jun 2009 19:19:02 +0200
+
+bcmwl (5.10.91.9+bdcom-0ubuntu1) karmic; urgency=low
+
+  * debian/control:
+    - Add misc:Depends.
+    - Update Standards-Version.
+    - Depend on linux-headers-generic for i386 and amd64
+      and on linux-headers-lpia for lpia.
+    - Limit architectures to i386 amd64 and lpia.
+    - Set Vcs-Bzr.
+    - Add new package bcmwl-modaliases.
+    - Change maintainer to Ubuntu Core Devs and set
+      original maintainer to myself.
+  * debian/copyright:
+    - Add license from the binary library.
+  * debian/rules
+    - Switch to CDBS.
+    - Do not apply any patches.
+    - Automatically generate debian/dkms.conf and
+      debian/bcmwl-kernel-source.install.
+    - Call debian/bcmwl_supported to install
+      modalias file in /usr/share/jockey/modaliases (LP: #381682)
+  * src/patches:
+    - Move patches directory to debian/patches.
+  * debian/patches/0002-Makefile.patch:
+    - Replace dpkg-architecture with dpkg --print-architecture
+      so as not to depend on dpkg-dev.
+  * debian/dkms.conf.in:
+    - Handle patches here so that different patches 
+      can be applied to different kernel versions.
+  * Separate source from debian/.
+  * debian/bcmwl-kernel-source.postinst:
+    - Cover the use case of buildd machines and build the
+      module for the right kernel on 1st installation.
+    - Create a blacklist file containing b43, b43legacy, ssb
+      bcm43xx and add workaround for b44 so that it is loaded
+      after wl (provided that b44 is used).
+    - Update initramfs.
+  * debian/bcmwl-kernel-source.postrm:
+    - Remove blacklist file.
+    - Update initramfs.
+  * debian/patches:
+    - Add 0004-broadcom-sta-5.10.91.9-linux-2.6.30.patch.
+  * debian/dkms.conf.in:
+    - Make sure that patch 0004 is applied only to
+      2.6.30 kernels.
+ 
+ -- Alberto Milone <alberto.milone@canonical.com>  Fri, 19 Jun 2009 13:12:39 +0200
+
+bcmwl (5.10.91.9-3) karmic; urgency=low
+
+  * Fixed build errors with 2.6.30
+
+ -- Tim Gardner <tim.gardner@canonical.com>  Tue, 12 May 2009 15:29:06 -0600
+
+bcmwl (5.10.91.9-2) karmic; urgency=low
+
+  * Add src/lib/LICENSE.txt to copyright notice. 
+
+ -- Tim Gardner <tim.gardner@canonical.com>  Mon, 11 May 2009 16:04:29 +0000
+
+bcmwl (5.10.91.9-1) karmic; urgency=low
+
+  * Initial release
+
+ -- Tim Gardner <tim.gardner@canonical.com>  Fri, 5 Sep 2008 18:15:32 -0400
