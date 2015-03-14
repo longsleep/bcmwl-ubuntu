@@ -1,3 +1,15 @@
+bcmwl (6.30.223.248+bdcom-1longsleep0) utopic; urgency=medium
+
+  * debian/dkms.conf.in
+    debian/patches/0016-repair-make-warnings.patch
+    debian/patches/0017-add-support-for-Linux-4.0.patch
+    - Fixed make warnings
+      Credit for the patch goes to Krzysztof Kolasa.
+    - Add support for Linux 4.0
+      Credit for the patch goes to Krzysztof Kolasa.
+
+ -- Simon Eisenmann <simon@longsleep.org>  Sat, 14 Mar 2015 15:28:46 +0100
+
 bcmwl (6.30.223.248+bdcom-0ubuntu2) vivid; urgency=medium
 
   * debian/dkms.conf.in,
