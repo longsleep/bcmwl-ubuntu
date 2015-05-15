@@ -14,7 +14,7 @@ with DKMS when running a Kernel >= 3.19.
     sudo apt-get install git-buildpackage
     mkdir bcmwl-ubuntu
     cd bcmwl-ubuntu
-    git clone git@github.com:longsleep/bcmwl-ubuntu.git bcmwl-ubuntu-master
+    git clone https://github.com/longsleep/bcmwl-ubuntu.git bcmwl-ubuntu-master
     cd bcmwl-ubuntu-master
     gbp buildpackage -b -uc -us
     ls ../*.deb
