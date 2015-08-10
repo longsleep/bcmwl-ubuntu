@@ -1,3 +1,11 @@
+bcmwl (6.30.223.248+bdcom-1longsleep1) vivid; urgency=medium
+
+  * debian/patches/0018-add-support-for-Linux-4.2.patch
+    - Add support for Linux 4.2
+      Credit for the patch goes to Max Boesing.
+
+ -- Simon Eisenmann <simon@longsleep.org>  Mon, 10 Aug 2015 22:46:41 +0200
+
 bcmwl (6.30.223.248+bdcom-1longsleep0) utopic; urgency=medium
 
   * debian/dkms.conf.in
