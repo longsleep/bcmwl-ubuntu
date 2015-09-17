@@ -1,4 +1,4 @@
-bcmwl (6.30.223.248+bdcom-1longsleep2) Vivid; urgency=medium
+bcmwl (6.30.223.248+bdcom-1longsleep2) vivid; urgency=medium
 
   * Backport for older Ubuntu releases, no source code changes.
 
