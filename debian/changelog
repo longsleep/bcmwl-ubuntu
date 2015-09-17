@@ -1,3 +1,9 @@
+bcmwl (6.30.223.248+bdcom-1longsleep2) Vivid; urgency=medium
+
+  * Backport for older Ubuntu releases, no source code changes.
+
+ -- Simon Eisenmann <simon@longsleep.org>  Thu, 17 Sep 2015 22:39:20 +0200
+
 bcmwl (6.30.223.248+bdcom-0ubuntu4.1) wily; urgency=medium
 
   * Added needed patches for lts kernels (LP: #1415880)
