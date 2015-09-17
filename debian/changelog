@@ -1,22 +1,32 @@
-bcmwl (6.30.223.248+bdcom-1longsleep1) vivid; urgency=medium
+bcmwl (6.30.223.248+bdcom-0ubuntu4.1) wily; urgency=medium
 
-  * debian/patches/0018-add-support-for-Linux-4.2.patch
-    - Add support for Linux 4.2
-      Credit for the patch goes to Max Boesing.
+  * Added needed patches for lts kernels (LP: #1415880)
+  * Fixed null pointer reference (LP: #1415880)
+    d/p/0019-broadcom-sta-6.30.223.248-3.18-null-pointer-fix.patch
 
- -- Simon Eisenmann <simon@longsleep.org>  Mon, 10 Aug 2015 22:46:41 +0200
+ -- Rafael David Tinoco <rafael.tinoco@canonical.com>  Thu, 10 Sep 2015 10:42:38 -0500
 
-bcmwl (6.30.223.248+bdcom-1longsleep0) utopic; urgency=medium
+bcmwl (6.30.223.248+bdcom-0ubuntu4) wily; urgency=medium
 
+  * Add support for Linux 4.2
+    debian/patches/0018-cfg80211_disconnected.patch 
+    A successful 4.2 based install depends on EXPORT_SYMBOL(flush_workqueue)
+    which will first appear in linux (4.2.0-3.3).
+
+ -- Tim Gardner <tim.gardner@canonical.com>  Tue, 04 Aug 2015 11:32:12 -0600
+
+bcmwl (6.30.223.248+bdcom-0ubuntu3) wily; urgency=medium
+
+  [ Simon Eisenmann ]
   * debian/dkms.conf.in
     debian/patches/0016-repair-make-warnings.patch
     debian/patches/0017-add-support-for-Linux-4.0.patch
     - Fixed make warnings
       Credit for the patch goes to Krzysztof Kolasa.
-    - Add support for Linux 4.0
+    - Add support for Linux 4.0 (LP: #1424676)
       Credit for the patch goes to Krzysztof Kolasa.
 
- -- Simon Eisenmann <simon@longsleep.org>  Sat, 14 Mar 2015 15:28:46 +0100
+ -- Mario Limonciello <Mario_Limonciello@Dell.com>  Mon, 11 May 2015 18:22:09 -0500
 
 bcmwl (6.30.223.248+bdcom-0ubuntu2) vivid; urgency=medium
 
