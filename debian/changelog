@@ -1,3 +1,15 @@
+bcmwl (6.30.223.271+bdcom-1longsleep0) wily; urgency=medium
+
+  * New upstream release
+    - This is an official public release from Broadcom.
+  * debian/dkms.conf.in:
+    - Drop patches for Kernels 3.15, 3.18 and 4.0 which are now upstream.
+    - Drop module license patch which is now upstream.
+    - Drop repair make warnings patch which is now upstream.
+    - Drop cfg80211 disconnected patch which is now upstream.
+
+ -- Simon Eisenmann <simon@longsleep.org>  Thu, 05 Nov 2015 22:16:18 +0100
+
 bcmwl (6.30.223.248+bdcom-1longsleep3) wily; urgency=medium
 
   * Rebuild for wily, no source code changes. 
