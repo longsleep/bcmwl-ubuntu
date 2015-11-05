@@ -2,7 +2,7 @@
  * Linux-specific portion of Broadcom 802.11abg Networking Device Driver
  * cfg80211 interface
  *
- * Copyright (C) 2014, Broadcom Corporation. All Rights Reserved.
+ * Copyright (C) 2015, Broadcom Corporation. All Rights Reserved.
  * 
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -63,8 +63,15 @@ static s32 wl_cfg80211_set_wiphy_params(struct wiphy *wiphy, u32 changed);
 static s32 wl_cfg80211_join_ibss(struct wiphy *wiphy, struct net_device *dev,
            struct cfg80211_ibss_params *params);
 static s32 wl_cfg80211_leave_ibss(struct wiphy *wiphy, struct net_device *dev);
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3, 16, 0)
 static s32 wl_cfg80211_get_station(struct wiphy *wiphy,
            struct net_device *dev, u8 *mac, struct station_info *sinfo);
+#else
+static s32 wl_cfg80211_get_station(struct wiphy *wiphy,
+           struct net_device *dev, const u8 *mac, struct station_info *sinfo);
+#endif
+
 static s32 wl_cfg80211_set_power_mgmt(struct wiphy *wiphy,
            struct net_device *dev, bool enabled, s32 timeout);
 static int wl_cfg80211_connect(struct wiphy *wiphy, struct net_device *dev,
@@ -1387,7 +1394,7 @@ wl_cfg80211_get_key(struct wiphy *wiphy, struct net_device *dev,
 	key_endian_to_host(&key);
 
 	params.key_len = (u8) min_t(u8, DOT11_MAX_KEY_SIZE, key.len);
-	memcpy(params.key, key.data, params.key_len);
+	memcpy((char *)params.key, key.data, params.key_len);
 
 	if ((err = wl_dev_ioctl(dev, WLC_GET_WSEC, &wsec, sizeof(wsec)))) {
 		return err;
@@ -1421,9 +1428,15 @@ wl_cfg80211_get_key(struct wiphy *wiphy, struct net_device *dev,
 	return err;
 }
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3, 16, 0)
 static s32
 wl_cfg80211_get_station(struct wiphy *wiphy, struct net_device *dev,
                         u8 *mac, struct station_info *sinfo)
+#else
+static s32
+wl_cfg80211_get_station(struct wiphy *wiphy, struct net_device *dev,
+                        const u8 *mac, struct station_info *sinfo)
+#endif
 {
 	struct wl_cfg80211_priv *wl = wiphy_to_wl(wiphy);
 	scb_val_t scb_val;
@@ -1441,7 +1454,11 @@ wl_cfg80211_get_station(struct wiphy *wiphy, struct net_device *dev,
 		WL_DBG(("Could not get rate (%d)\n", err));
 	} else {
 		rate = dtoh32(rate);
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 0, 0)
+		sinfo->filled |= BIT(NL80211_STA_INFO_TX_BITRATE);
+#else
 		sinfo->filled |= STATION_INFO_TX_BITRATE;
+#endif
 		sinfo->txrate.legacy = rate * 5;
 		WL_DBG(("Rate %d Mbps\n", (rate / 2)));
 	}
@@ -1454,7 +1471,11 @@ wl_cfg80211_get_station(struct wiphy *wiphy, struct net_device *dev,
 			return err;
 		}
 		rssi = dtoh32(scb_val.val);
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 0, 0)
+		sinfo->filled |= BIT(NL80211_STA_INFO_SIGNAL);
+#else
 		sinfo->filled |= STATION_INFO_SIGNAL;
+#endif
 		sinfo->signal = rssi;
 		WL_DBG(("RSSI %d dBm\n", rssi));
 	}
@@ -2010,9 +2031,15 @@ static s32 wl_inform_single_bss(struct wl_cfg80211_priv *wl, struct wl_bss_info 
 
 	notify_ie = (u8 *)bi + le16_to_cpu(bi->ie_offset);
 	notify_ielen = le32_to_cpu(bi->ie_length);
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3, 18, 0)
 	cbss = cfg80211_inform_bss(wiphy, channel, (const u8 *)(bi->BSSID.octet),
 		0, beacon_proberesp->capab_info, beacon_proberesp->beacon_int,
 		(const u8 *)notify_ie, notify_ielen, signal, GFP_KERNEL);
+#else
+	cbss = cfg80211_inform_bss(wiphy, channel, CFG80211_BSS_FTYPE_UNKNOWN, (const u8 *)(bi->BSSID.octet),
+		0, beacon_proberesp->capab_info, beacon_proberesp->beacon_int,
+		(const u8 *)notify_ie, notify_ielen, signal, GFP_KERNEL);
+#endif
 
 	if (unlikely(!cbss))
 		return -ENOMEM;
@@ -2036,6 +2063,12 @@ wl_notify_connect_status(struct wl_cfg80211_priv *wl, struct net_device *ndev,
 	u32 event = EVENT_TYPE(e);
 	u16 flags = EVENT_FLAGS(e);
 	u32 status = EVENT_STATUS(e);
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 15, 0)
+	struct ieee80211_channel *channel = NULL;
+	struct wiphy *wiphy;
+	u32 chanspec, chan;
+	u32 freq, band;
+#endif 
 
 	WL_DBG(("\n"));
 
@@ -2047,7 +2080,11 @@ wl_notify_connect_status(struct wl_cfg80211_priv *wl, struct net_device *ndev,
 		}
 		else if ((event == WLC_E_LINK && ~(flags & WLC_EVENT_MSG_LINK)) ||
 			event == WLC_E_DEAUTH_IND || event == WLC_E_DISASSOC_IND) {
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4,2,0)
 			cfg80211_disconnected(ndev, 0, NULL, 0, GFP_KERNEL);
+#else
+			cfg80211_disconnected(ndev, 0, NULL, 0, false, GFP_KERNEL);
+#endif
 			clear_bit(WL_STATUS_CONNECTED, &wl->status);
 			wl_link_down(wl);
 			wl_init_prof(wl->profile);
@@ -2071,7 +2108,21 @@ wl_notify_connect_status(struct wl_cfg80211_priv *wl, struct net_device *ndev,
 			wl_get_assoc_ies(wl);
 			memcpy(&wl->bssid, &e->addr, ETHER_ADDR_LEN);
 			wl_update_bss_info(wl);
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 15, 0)
+			wiphy = wl_to_wiphy(wl);
+			err = wl_dev_intvar_get(ndev, "chanspec", &chanspec);
+			if (err) {
+				WL_ERR(("Could not get chanspec, err %d\n", err));
+				return err;
+			}
+			chan = wf_chspec_ctlchan(chanspec);
+			band = (chan <= CH_MAX_2G_CHANNEL) ? IEEE80211_BAND_2GHZ : IEEE80211_BAND_5GHZ;
+			freq = ieee80211_channel_to_frequency(chan, band);
+			channel = ieee80211_get_channel(wiphy, freq);
+			cfg80211_ibss_joined(ndev, (u8 *)&wl->bssid, channel, GFP_KERNEL);
+#else
 			cfg80211_ibss_joined(ndev, (u8 *)&wl->bssid, GFP_KERNEL);
+#endif
 			set_bit(WL_STATUS_CONNECTED, &wl->status);
 			wl->profile->active = true;
 		}
@@ -2629,7 +2680,13 @@ cfg80211_attach_out:
 
 void wl_cfg80211_detach(struct net_device *ndev)
 {
-	struct wl_cfg80211_priv *wl = ndev_to_wl(ndev);
+	struct wl_cfg80211_priv *wl;
+
+	if (ndev->ieee80211_ptr == NULL) {
+                WL_ERR(( "NULL ndev->ieee80211ptr, unable to deref wl\n"));
+                return;
+        }
+	wl = ndev_to_wl(ndev);
 
 	wl_deinit_cfg80211_priv(wl);
 	wl_free_wdev(wl);
