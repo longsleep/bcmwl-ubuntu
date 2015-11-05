@@ -1,3 +1,12 @@
+bcmwl (6.30.223.248+bdcom-0ubuntu7) wily; urgency=medium
+
+  * debian/bcmwl-kernel-source.modaliases: really fix matching for model 43b1,
+    apparently modaliases are case-sensitive, and changing ubuntu-drivers
+    to remove that limitation looks like it would negatively affect its
+    performance. (LP: #1498074)
+
+ -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Mon, 28 Sep 2015 15:46:13 -0400
+
 bcmwl (6.30.223.248+bdcom-0ubuntu6) wily; urgency=medium
 
   * debian/bcmwl-kernel-source.modaliases: add 43b1 as a matched model in
