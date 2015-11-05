@@ -1,3 +1,9 @@
+bcmwl (6.30.223.248+bdcom-1longsleep3) wily; urgency=medium
+
+  * Rebuild for wily, no source code changes. 
+
+ -- Simon Eisenmann <simon@longsleep.org>  Thu, 05 Nov 2015 20:56:47 +0100
+
 bcmwl (6.30.223.248+bdcom-0ubuntu7) wily; urgency=medium
 
   * debian/bcmwl-kernel-source.modaliases: really fix matching for model 43b1,
