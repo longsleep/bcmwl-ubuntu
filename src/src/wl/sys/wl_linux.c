@@ -2,7 +2,7 @@
  * Linux-specific portion of
  * Broadcom 802.11abg Networking Device Driver
  *
- * Copyright (C) 2014, Broadcom Corporation. All Rights Reserved.
+ * Copyright (C) 2015, Broadcom Corporation. All Rights Reserved.
  * 
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -16,7 +16,7 @@
  * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *
- * $Id: wl_linux.c 461277 2014-03-11 18:55:39Z $
+ * $Id: wl_linux.c 580354 2015-08-18 23:42:37Z $
  */
 
 #define LINUX_PORT
@@ -155,6 +155,8 @@ static void wl_uninit_rfkill(wl_info_t *wl);
 static int wl_set_radio_block(void *data, bool blocked);
 static void wl_report_radio_state(wl_info_t *wl);
 #endif
+
+MODULE_LICENSE("MIXED/Proprietary");
 
 static struct pci_device_id wl_id_table[] =
 {
@@ -878,7 +880,7 @@ wl_remove(struct pci_dev *pdev)
 static SIMPLE_DEV_PM_OPS(wl_pm_ops, wl_suspend, wl_resume);
 #endif
 
-static struct pci_driver wl_pci_driver = {
+static struct pci_driver wl_pci_driver __refdata = {
 	.name =		"wl",
 	.probe =	wl_pci_probe,
 	.remove =	__devexit_p(wl_remove),
@@ -1270,6 +1272,7 @@ wl_free_if(wl_info_t *wl, wl_if_t *wlif)
 		MFREE(wl->osh, wlif->dev, sizeof(struct net_device));
 #else
 		free_netdev(wlif->dev);
+		wlif->dev = NULL;
 #endif 
 	}
 
@@ -1307,7 +1310,12 @@ wl_alloc_linux_if(wl_if_t *wlif)
 	dev->priv = priv_link;
 #else
 
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(3, 17, 0))
 	dev = alloc_netdev(sizeof(priv_link_t), intf_name, ether_setup);
+#else
+	dev = alloc_netdev(sizeof(priv_link_t), intf_name, NET_NAME_UNKNOWN, ether_setup);
+#endif
+
 	if (!dev) {
 		WL_ERROR(("wl%d: %s: alloc_netdev failed\n",
 			(wl->pub)?wl->pub->unit:wlif->subunit, __FUNCTION__));
@@ -2455,8 +2463,10 @@ wl_monitor(wl_info_t *wl, wl_rxsts_t *rxsts, void *p)
 		p80211msg_t *phdr;
 
 		len = sizeof(p80211msg_t) + oskb->len - D11_PHY_HDR_LEN;
-		if ((skb = dev_alloc_skb(len)) == NULL)
+		if ((skb = dev_alloc_skb(len)) == NULL) {
+			WL_ERROR(("%s: dev_alloc_skb() failure, mon type 1",  __FUNCTION__));
 			return;
+		}
 
 		skb_put(skb, len);
 		phdr = (p80211msg_t*)skb->data;
@@ -2535,8 +2545,10 @@ wl_monitor(wl_info_t *wl, wl_rxsts_t *rxsts, void *p)
 			rtap_len = sizeof(wl_radiotap_ht_brcm_2_t);
 
 		len = rtap_len + (oskb->len - D11_PHY_HDR_LEN);
-		if ((skb = dev_alloc_skb(len)) == NULL)
+		if ((skb = dev_alloc_skb(len)) == NULL) {
+			WL_ERROR(("%s: dev_alloc_skb() failure, mon type 2",  __FUNCTION__));
 			return;
+		}
 
 		skb_put(skb, len);
 
@@ -2664,8 +2676,10 @@ wl_monitor(wl_info_t *wl, wl_rxsts_t *rxsts, void *p)
 			len += amsdu_len;
 		}
 
-		if ((skb = dev_alloc_skb(len)) == NULL)
+		if ((skb = dev_alloc_skb(len)) == NULL) {
+			WL_ERROR(("%s: dev_alloc_skb() failure, mon type 3",  __FUNCTION__));
 			return;
+		}
 
 		skb_put(skb, len);
 
@@ -3224,42 +3238,71 @@ wl_linux_watchdog(void *ctx)
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3, 10, 0)
 static int
 wl_proc_read(char *buffer, char **start, off_t offset, int length, int *eof, void *data)
-#else
-static ssize_t
-wl_proc_read(struct file *filp, char __user *buffer, size_t length, loff_t *data)
-#endif
 {
 	wl_info_t * wl = (wl_info_t *)data;
-	int to_user;
-	int len;
+#else
+static ssize_t
+wl_proc_read(struct file *filp, char __user *buffer, size_t length, loff_t *offp)
+{
+	wl_info_t * wl = PDE_DATA(file_inode(filp));
+#endif
+	int bcmerror, len;
+	int to_user = 0;
+	char tmp[8];
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3, 10, 0)
 	if (offset > 0) {
 		*eof = 1;
 		return 0;
 	}
+#else
+	if (*offp > 0) { 
+		return 0; 
+	}
 #endif
 
-	if (!length) {
-		WL_ERROR(("%s: Not enough return buf space\n", __FUNCTION__));
-		return 0;
-	}
 	WL_LOCK(wl);
-	wlc_ioctl(wl->wlc, WLC_GET_MONITOR, &to_user, sizeof(int), NULL);
-	len = sprintf(buffer, "%d\n", to_user);
+	bcmerror = wlc_ioctl(wl->wlc, WLC_GET_MONITOR, &to_user, sizeof(int), NULL);
 	WL_UNLOCK(wl);
+
+	if (bcmerror != BCME_OK) {
+		WL_ERROR(("%s: GET_MONITOR failed with %d\n", __FUNCTION__, bcmerror));
+		return -EIO;
+	}
+
+	len = snprintf(tmp, ARRAY_SIZE(tmp), "%d\n", to_user);
+	tmp[ARRAY_SIZE(tmp) - 1] = '\0';
+	if ((len < 0) || (len >= ARRAY_SIZE(tmp))) {
+		WL_ERROR(("%s: tmp array not big enough %d > %zu", __FUNCTION__, len, ARRAY_SIZE(tmp)));
+		return -ERANGE;
+	}
+	if (length < len) {
+		WL_ERROR(( "%s: user buffer is too small (%d < %d)", __FUNCTION__, (int)length, len));
+		return -EMSGSIZE;
+	}
+	if (copy_to_user(buffer, tmp, len) != 0) {
+		WL_ERROR(( "%s: unable to copy data!", __FUNCTION__));
+		return -EFAULT;
+	}
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 10, 0)
+	*offp += len;
+#endif
+
 	return len;
 }
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3, 10, 0)
 static int
 wl_proc_write(struct file *filp, const char *buff, unsigned long length, void *data)
-#else
-static ssize_t
-wl_proc_write(struct file *filp, const char __user *buff, size_t length, loff_t *data)
-#endif
 {
 	wl_info_t * wl = (wl_info_t *)data;
+#else
+static ssize_t
+wl_proc_write(struct file *filp, const char __user *buff, size_t length, loff_t *offp)
+{
+	wl_info_t * wl = PDE_DATA(file_inode(filp));
+#endif
 	int from_user = 0;
 	int bcmerror;
 
@@ -3270,7 +3313,11 @@ wl_proc_write(struct file *filp, const char __user *buff, size_t length, loff_t 
 	}
 	if (copy_from_user(&from_user, buff, 1)) {
 		WL_ERROR(("%s: copy from user failed\n", __FUNCTION__));
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3, 10, 0)
 		return -EIO;
+#else
+		return -EFAULT;
+#endif
 	}
 
 	if (from_user >= 0x30)
@@ -3280,7 +3327,7 @@ wl_proc_write(struct file *filp, const char __user *buff, size_t length, loff_t 
 	bcmerror = wlc_ioctl(wl->wlc, WLC_SET_MONITOR, &from_user, sizeof(int), NULL);
 	WL_UNLOCK(wl);
 
-	if (bcmerror < 0) {
+	if (bcmerror != BCME_OK) {
 		WL_ERROR(("%s: SET_MONITOR failed with %d\n", __FUNCTION__, bcmerror));
 		return -EIO;
 	}
@@ -3304,8 +3351,8 @@ wl_reg_proc_entry(wl_info_t *wl)
 	if ((wl->proc_entry = create_proc_entry(tmp, 0644, NULL)) == NULL) {
 		WL_ERROR(("%s: create_proc_entry %s failed\n", __FUNCTION__, tmp));
 #else
-	if ((wl->proc_entry = proc_create(tmp, 0644, NULL, &wl_fops)) == NULL) {
-		WL_ERROR(("%s: proc_create %s failed\n", __FUNCTION__, tmp));
+	if ((wl->proc_entry = proc_create_data(tmp, 0644, NULL, &wl_fops, wl)) == NULL) {
+		WL_ERROR(("%s: proc_create_data %s failed\n", __FUNCTION__, tmp));
 #endif
 		ASSERT(0);
 		return -1;
