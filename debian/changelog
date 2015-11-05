@@ -1,3 +1,11 @@
+bcmwl (6.30.223.248+bdcom-0ubuntu6) wily; urgency=medium
+
+  * debian/bcmwl-kernel-source.modaliases: add 43b1 as a matched model in
+    modalises; https://wireless.wiki.kernel.org/en/users/Drivers/b43 says it
+    is supported by the wl driver (this is BCM4352). (LP: #1498074, #1173761)
+
+ -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Tue, 22 Sep 2015 09:52:45 -0400
+
 bcmwl (6.30.223.248+bdcom-0ubuntu5) wily; urgency=medium
 
   * debian/bcmwl-kernel-source.modaliases: Fine-tune product list as per
