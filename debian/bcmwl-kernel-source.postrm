@@ -16,6 +16,10 @@ case "$1" in
 		
 		# Update initramfs
 		update-initramfs -u
+
+		# Warn a reboot is needed
+		[ -x /usr/share/update-notifier/notify-reboot-required ] && \
+		    /usr/share/update-notifier/notify-reboot-required || true
 		;;
 esac
 

@@ -1,1 +1,19 @@
-alias pci:v000014E4d*sv*sd*bc02sc80i* wl bcmwl-kernel-source
+alias pci:v000014E4d00004311sv*sd*bc02sc80i* wl
+alias pci:v000014E4d00004312sv*sd*bc02sc80i* wl
+alias pci:v000014E4d00004313sv*sd*bc02sc80i* wl
+alias pci:v000014E4d00004315sv*sd*bc02sc80i* wl
+alias pci:v000014E4d00004727sv*sd*bc02sc80i* wl
+alias pci:v000014E4d00004328sv*sd*bc02sc80i* wl
+alias pci:v000014E4d00004328sv*sd*bc02sc80i* wl
+alias pci:v000014E4d00004329sv*sd*bc02sc80i* wl
+alias pci:v000014E4d0000432asv*sd*bc02sc80i* wl
+alias pci:v000014E4d0000432bsv*sd*bc02sc80i* wl
+alias pci:v000014E4d0000432csv*sd*bc02sc80i* wl
+alias pci:v000014E4d0000432dsv*sd*bc02sc80i* wl
+alias pci:v000014E4d00004365sv*sd*bc02sc80i* wl
+alias pci:v000014E4d00004353sv*sd*bc02sc80i* wl
+alias pci:v000014E4d00004357sv*sd*bc02sc80i* wl
+alias pci:v000014E4d00004358sv*sd*bc02sc80i* wl
+alias pci:v000014E4d00004359sv*sd*bc02sc80i* wl
+alias pci:v000014E4d00004331sv*sd*bc02sc80i* wl
+alias pci:v000014E4d000043a0sv*sd*bc02sc80i* wl

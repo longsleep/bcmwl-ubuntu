@@ -1,8 +1,12 @@
-bcmwl (6.30.223.248+bdcom-1longsleep2) vivid; urgency=medium
+bcmwl (6.30.223.248+bdcom-0ubuntu5) wily; urgency=medium
 
-  * Backport for older Ubuntu releases, no source code changes.
+  * debian/bcmwl-kernel-source.modaliases: Fine-tune product list as per
+    http://www.broadcom.com/docs/linux_sta/README_6.30.223.248.txt. Thanks
+    Adam Smith! (LP: #1490713)
+  * debian/bcmwl-kernel-source.postrm: Warn that a reboot is needed after
+    removing. Thanks Adam Smith! (LP: #1491070)
 
- -- Simon Eisenmann <simon@longsleep.org>  Thu, 17 Sep 2015 22:39:20 +0200
+ -- Martin Pitt <martin.pitt@ubuntu.com>  Fri, 18 Sep 2015 10:12:45 +0200
 
 bcmwl (6.30.223.248+bdcom-0ubuntu4.1) wily; urgency=medium
 
