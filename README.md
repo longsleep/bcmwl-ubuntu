@@ -1,5 +1,5 @@
 This project is a Ubuntu DKMS package for the Broadcom wireless
-driver found at http://www.broadcom.com/support/802.11/linux_sta.php.
+driver found at http://www.broadcom.com/support/?gid=1
 
 The patches are applied on install of the Ubuntu package. This means you
 have to build the Ubuntu package.
