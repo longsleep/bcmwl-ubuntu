@@ -1,3 +1,16 @@
+bcmwl (6.30.223.271+bdcom-2r2rien1) experimental; urgency=medium
+
+  * Non-maintainer upload
+  * Added patches from arch
+    - See https://aur.archlinux.org/packages/broadcom-wl/.
+    - 0019_linux-4.07.patch.
+    - 0019_linux-4.08.patch.
+    - 0019_linux-4.11.patch.
+    - 0019_linux-4.12.patch.
+    - 0019_linux-4.15.patch.
+
+ -- r2rien <r2rien@gmail.com>  Mon, 05 Mar 2018 02:27:41 +0100
+
 bcmwl (6.30.223.271+bdcom-1longsleep0) wily; urgency=medium
 
   * New upstream release
