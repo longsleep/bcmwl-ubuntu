@@ -2,7 +2,7 @@ bcmwl (6.30.223.271+bdcom-2r2rien1) experimental; urgency=medium
 
   * Non-maintainer upload
   * Added patches from arch
-    - See https://aur.archlinux.org/packages/broadcom-wl/.
+    - See https://www.archlinux.org/packages/community/x86_64/broadcom-wl-dkms/.
     - 0019_linux-4.07.patch.
     - 0019_linux-4.08.patch.
     - 0019_linux-4.11.patch.
